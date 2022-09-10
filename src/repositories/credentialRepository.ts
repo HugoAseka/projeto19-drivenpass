@@ -12,3 +12,7 @@ export async function addCredentialToDatabase(
 export async function getUserCredentialByName(name: string, owner_id: number) {
   return await prisma.credentials.findMany({ where: { name, owner_id } });
 }
+
+export async function getAllUserCredential(userId: number) {
+  return await prisma.credentials.findMany({ where: { owner_id: userId } });
+}

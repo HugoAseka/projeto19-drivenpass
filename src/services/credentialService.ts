@@ -28,3 +28,22 @@ async function nameCheck(owner_id: number, name: string) {
     };
   }
 }
+
+export async function getAllUserCredential(userId: number) {
+  const cryptr = new Cryptr(process.env.SECRET);
+  const encryptedCredentials = await credentialRepository.getAllUserCredential(
+    userId
+  );
+
+  const credentials = encryptedCredentials.map((credential) => {
+    return {
+      id: credential.id,
+      name: credential.name,
+      url: credential.url,
+      username: credential.username,
+      password: cryptr.decrypt(credential.password),
+    };
+  });
+
+  return credentials;
+}
