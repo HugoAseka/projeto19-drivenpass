@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { signIn } from "../controllers/authController";
+import * as authController from "../controllers/authController";
 var authRoute = Router();
-authRoute.get("/teste", signIn);
+authRoute.get("/teste", authController.signIn);
 export default authRoute;
