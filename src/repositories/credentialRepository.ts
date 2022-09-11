@@ -16,3 +16,7 @@ export async function getUserCredentialByName(name: string, owner_id: number) {
 export async function getAllUserCredential(userId: number) {
   return await prisma.credentials.findMany({ where: { owner_id: userId } });
 }
+
+export async function getCredentialById(id: number) {
+  return await prisma.credentials.findUnique({ where: { id } });
+}

@@ -47,3 +47,24 @@ export async function getAllUserCredential(userId: number) {
 
   return credentials;
 }
+
+export async function getUserCredentialById(id: number, owner_id: number) {
+  const cryptr = new Cryptr(process.env.SECRET);
+
+  const credential = await getCredential(id, owner_id);
+
+  return { ...credential, password: cryptr.decrypt(credential.password) };
+}
+
+async function getCredential(credentialId: number, owner_id: number) {
+  const credential = await credentialRepository.getCredentialById(credentialId);
+  console.log(credential)
+  if (!credential)
+    throw { code: "NotFound", message: "Credencial não existe." };
+  if (credential.owner_id !== owner_id)
+    throw {
+      code: "Unauthorized",
+      message: "Credencial não pertence ao usuário.",
+    };
+  return credential;
+}

@@ -19,4 +19,10 @@ credentialRouter.get(
   credentialController.getAllUserCredential
 );
 
+credentialRouter.get(
+  "/credenciais/:id",
+  validateToken,
+  credentialController.getCredentialById
+);
+
 export default credentialRouter;
