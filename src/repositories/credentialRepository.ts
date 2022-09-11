@@ -20,3 +20,7 @@ export async function getAllUserCredential(userId: number) {
 export async function getCredentialById(id: number) {
   return await prisma.credentials.findUnique({ where: { id } });
 }
+
+export async function deleteCredentialById(id: number) {
+  await prisma.credentials.delete({ where: { id } });
+}

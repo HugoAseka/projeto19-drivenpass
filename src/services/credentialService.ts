@@ -58,7 +58,7 @@ export async function getUserCredentialById(id: number, owner_id: number) {
 
 async function getCredential(credentialId: number, owner_id: number) {
   const credential = await credentialRepository.getCredentialById(credentialId);
-  console.log(credential)
+  console.log(credential);
   if (!credential)
     throw { code: "NotFound", message: "Credencial não existe." };
   if (credential.owner_id !== owner_id)
@@ -67,4 +67,12 @@ async function getCredential(credentialId: number, owner_id: number) {
       message: "Credencial não pertence ao usuário.",
     };
   return credential;
+}
+
+export async function deleteCredentialById(
+  owner_id: number,
+  credentialId: number
+) {
+  await getCredential(credentialId, owner_id);
+  await credentialRepository.deleteCredentialById(credentialId);
 }

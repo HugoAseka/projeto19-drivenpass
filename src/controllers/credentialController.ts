@@ -1,5 +1,6 @@
 import * as credentialService from "../services/credentialService.js";
 import { Request, Response } from "express";
+import { number } from "joi";
 
 export async function createCredential(req: Request, res: Response) {
   const { id: owner_id } = res.locals.decodedToken;
@@ -26,4 +27,11 @@ export async function getCredentialById(req: Request, res: Response) {
     owner_id
   );
   res.status(200).send(credential);
+}
+
+export async function deleteCredentialById(req: Request, res: Response) {
+  const { id: owner_id } = res.locals.decodedToken;
+  const { id: credentialId } = req.params;
+  await credentialService.deleteCredentialById(owner_id, Number(credentialId));
+  res.sendStatus(200);
 }

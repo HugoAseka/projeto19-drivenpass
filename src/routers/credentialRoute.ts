@@ -25,4 +25,10 @@ credentialRouter.get(
   credentialController.getCredentialById
 );
 
+credentialRouter.delete(
+  "/credenciais/:id",
+  validateToken,
+  credentialController.deleteCredentialById
+);
+
 export default credentialRouter;
