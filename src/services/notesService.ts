@@ -24,12 +24,12 @@ async function getNoteByName(owner_id: number, name: string) {
     throw { code: "Conflict", message: "Já existe uma nota com esse nome." };
 }
 
-async function getNoteById(noteId: number, owner_id: number) {
+export async function getNoteById(noteId: number, owner_id: number) {
   const note = await noteRepository.getNoteById(noteId);
 
   if (!note) throw { code: "NotFound", message: "Nota não existe." };
   if (note.owner_id !== owner_id)
     throw { code: "Unauthorized", message: "Nota não pertence ao usuário." };
 
-  return note;
+  return { ...note };
 }

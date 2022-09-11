@@ -12,8 +12,8 @@ notesRouter.post(
   validateObj(noteSchema),
   notesController.createCredential
 );
-
 notesRouter.get("/notas", validateToken, notesController.getAllNotes);
+notesRouter.get("/notas/:id",validateToken,notesController.getNoteById);
 
 
 
