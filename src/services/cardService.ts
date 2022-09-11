@@ -40,10 +40,16 @@ export async function getCardById(cardId: number, owner_id: number) {
   const card = await checkCardById(cardId, owner_id);
   return { ...card, password: cryptr.decrypt(card.password) };
 }
+
 async function checkCardById(cardId: number, owner_id: number) {
   const card = await cardRepository.getCardById(cardId);
   if (!card) throw { code: "NotFound", message: "Cartão não existe." };
   if (card.owner_id !== owner_id)
     throw { code: "Unauthorized", message: "Cartão não pertence ao usuário." };
   return card;
+}
+
+export async function deleteCard(cardId:number,owner_id:number){
+    await checkCardById(cardId,owner_id);
+    await cardRepository.deleteCard(cardId);
 }
