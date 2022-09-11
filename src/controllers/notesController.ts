@@ -9,3 +9,9 @@ export async function createCredential(req: Request, res: Response) {
 
   res.sendStatus(201);
 }
+
+export async function getAllNotes(req:Request,res:Response){
+    const {id} = res.locals.decodedToken;
+    const notes = await notesService.getAllNotes(id);
+    res.status(200).send(notes);
+}

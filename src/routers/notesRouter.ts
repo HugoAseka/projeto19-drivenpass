@@ -13,4 +13,8 @@ notesRouter.post(
   notesController.createCredential
 );
 
+notesRouter.get("/notas", validateToken, notesController.getAllNotes);
+
+
+
 export default notesRouter;

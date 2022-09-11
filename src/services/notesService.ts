@@ -5,6 +5,18 @@ export async function createNote(data: noteRepository.TypeNewNote) {
   await noteRepository.addNoteToDatabase({ ...data });
 }
 
+export async function getAllNotes(owner_id: number) {
+  const notes = await noteRepository.getAllUserNotes(owner_id);
+  const data = notes.map((el, ind) => {
+    return {
+      id: el.id,
+      title: el.title,
+      anotation: el.anotation,
+    };
+  });
+  return { notes: data };
+}
+
 async function getNoteByName(owner_id: number, name: string) {
   const note = await noteRepository.getNoteByName(owner_id, name);
 
