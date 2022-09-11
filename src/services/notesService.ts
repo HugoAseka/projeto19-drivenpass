@@ -33,3 +33,8 @@ export async function getNoteById(noteId: number, owner_id: number) {
 
   return { ...note };
 }
+
+export async function deleteNote(noteId: number, owner_id: number) {
+  await getNoteById(noteId, owner_id);
+  await noteRepository.deleteNote(noteId);
+}

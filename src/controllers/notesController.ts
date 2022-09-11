@@ -22,3 +22,10 @@ export async function getNoteById(req: Request, res: Response) {
   const note = await notesService.getNoteById(Number(noteId), owner_id);
   res.status(200).send(note);
 }
+
+export async function deleteNote(req: Request, res: Response) {
+  const { id: owner_id } = res.locals.decodedToken;
+  const { id: noteId } = req.params;
+  await notesService.deleteNote(Number(noteId), owner_id);
+  res.sendStatus(202);
+}

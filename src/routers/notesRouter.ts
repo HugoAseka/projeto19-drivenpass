@@ -13,8 +13,7 @@ notesRouter.post(
   notesController.createCredential
 );
 notesRouter.get("/notas", validateToken, notesController.getAllNotes);
-notesRouter.get("/notas/:id",validateToken,notesController.getNoteById);
-
-
+notesRouter.get("/notas/:id", validateToken, notesController.getNoteById);
+notesRouter.delete("/notas/:id", validateToken, notesController.deleteNote);
 
 export default notesRouter;
