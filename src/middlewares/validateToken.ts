@@ -10,7 +10,7 @@ function validateToken(req: Request, res: Response, next: NextFunction) {
 
   if (!token) {
     throw {
-      code: "Anauthorized",
+      code: "Unauthorized",
       message: "Um token é necessario para autenticação",
     };
   }
