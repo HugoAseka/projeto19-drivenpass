@@ -1,3 +1,14 @@
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -34,35 +45,64 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import * as authService from "../services/authService.js";
-export function signIn(req, res) {
+import * as cardRepository from "../repositories/cardRepository.js";
+import Cryptr from "cryptr";
+export function createCard(data) {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, email, password, token;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
+        var cryptr;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
                 case 0:
-                    _a = req.body, email = _a.email, password = _a.password;
-                    return [4 /*yield*/, authService.login(email, password)];
+                    cryptr = new Cryptr(process.env.SECRET);
+                    return [4 /*yield*/, checkCardByName(data.owner_id, data.title)];
                 case 1:
-                    token = _b.sent();
-                    res.status(200).send(token);
+                    _a.sent();
+                    return [4 /*yield*/, cardRepository.addCardToDatabase(__assign(__assign({}, data), { cvc: cryptr.encrypt(data.cvc), password: cryptr.encrypt(data.password) }))];
+                case 2:
+                    _a.sent();
                     return [2 /*return*/];
             }
         });
     });
 }
-export function signUp(req, res) {
+function checkCardByName(owner_id, title) {
     return __awaiter(this, void 0, void 0, function () {
-        var data;
+        var card;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, cardRepository.getCardByName(owner_id, title)];
+                case 1:
+                    card = _a.sent();
+                    if (card.length !== 0)
+                        throw { code: "Conflict", message: "Nome de cartão já está em uso." };
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+export function getAllCards(id) {
+    return __awaiter(this, void 0, void 0, function () {
+        var cryptr, cards, data;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    data = req.body;
-                    return [4 /*yield*/, authService.createUser(data)];
+                    cryptr = new Cryptr(process.env.SECRET);
+                    cards = cardRepository.getAllCards(id);
+                    return [4 /*yield*/, cards];
                 case 1:
-                    _a.sent();
-                    res.sendStatus(201);
-                    return [2 /*return*/];
+                    data = (_a.sent()).map(function (el) {
+                        return {
+                            id: el.id,
+                            name: el.name,
+                            number: el.number,
+                            cvc: cryptr.decrypt(el.cvc),
+                            expiration_date: el.expiration_date,
+                            password: cryptr.decrypt(el.password),
+                            is_virtual: el.is_virtual,
+                            type: el.type
+                        };
+                    });
+                    return [2 /*return*/, { cards: data }];
             }
         });
     });

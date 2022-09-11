@@ -1,3 +1,14 @@
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -34,34 +45,69 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import * as authService from "../services/authService.js";
-export function signIn(req, res) {
+import * as credentialService from "../services/credentialService.js";
+export function createCredential(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, email, password, token;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
+        var owner_id, data;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
                 case 0:
-                    _a = req.body, email = _a.email, password = _a.password;
-                    return [4 /*yield*/, authService.login(email, password)];
+                    owner_id = res.locals.decodedToken.id;
+                    data = req.body;
+                    return [4 /*yield*/, credentialService.createCredential(__assign(__assign({}, data), { owner_id: owner_id }))];
                 case 1:
-                    token = _b.sent();
-                    res.status(200).send(token);
+                    _a.sent();
+                    res.sendStatus(201);
                     return [2 /*return*/];
             }
         });
     });
 }
-export function signUp(req, res) {
+export function getAllUserCredential(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var data;
+        var userId, credentials;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    data = req.body;
-                    return [4 /*yield*/, authService.createUser(data)];
+                    userId = res.locals.decodedToken.id;
+                    return [4 /*yield*/, credentialService.getAllUserCredential(userId)];
+                case 1:
+                    credentials = _a.sent();
+                    res.status(200).send(credentials);
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+export function getCredentialById(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var owner_id, credentialId, credential;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    owner_id = res.locals.decodedToken.id;
+                    credentialId = req.params.id;
+                    return [4 /*yield*/, credentialService.getUserCredentialById(Number(credentialId), owner_id)];
+                case 1:
+                    credential = _a.sent();
+                    res.status(200).send(credential);
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+export function deleteCredentialById(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var owner_id, credentialId;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    owner_id = res.locals.decodedToken.id;
+                    credentialId = req.params.id;
+                    return [4 /*yield*/, credentialService.deleteCredentialById(owner_id, Number(credentialId))];
                 case 1:
                     _a.sent();
-                    res.sendStatus(201);
+                    res.sendStatus(200);
                     return [2 /*return*/];
             }
         });

@@ -34,34 +34,53 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import * as authService from "../services/authService.js";
-export function signIn(req, res) {
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
+import dotenv from "dotenv";
+import * as authRepository from "../repositories/authRepository.js";
+dotenv.config();
+export function createUser(data) {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, email, password, token;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
-                case 0:
-                    _a = req.body, email = _a.email, password = _a.password;
-                    return [4 /*yield*/, authService.login(email, password)];
+        var existingUser, encryptedPassword;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, authRepository.getUserByEmail(data.email)];
                 case 1:
-                    token = _b.sent();
-                    res.status(200).send(token);
+                    existingUser = _a.sent();
+                    if (existingUser)
+                        throw { code: "Conflict", message: "Email já cadastrado!" };
+                    encryptedPassword = bcrypt.hashSync(data.password, 10);
+                    return [4 /*yield*/, authRepository.addUserToDatabase({
+                            name: data.name,
+                            email: data.email,
+                            password: encryptedPassword
+                        })];
+                case 2:
+                    _a.sent();
                     return [2 /*return*/];
             }
         });
     });
 }
-export function signUp(req, res) {
+export function login(email, password) {
     return __awaiter(this, void 0, void 0, function () {
-        var data;
+        var user, token;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0:
-                    data = req.body;
-                    return [4 /*yield*/, authService.createUser(data)];
+                case 0: return [4 /*yield*/, authRepository.getUserByEmail(email)];
                 case 1:
-                    _a.sent();
-                    res.sendStatus(201);
+                    user = _a.sent();
+                    if (!user)
+                        throw { code: "Not Found", message: "Email não cadastrado." };
+                    if (user && bcrypt.compareSync(password, user.password)) {
+                        token = jwt.sign({
+                            id: user.id
+                        }, process.env.SECRET_KEY_TOKEN, { expiresIn: "10 days" });
+                        return [2 /*return*/, token];
+                    }
+                    else {
+                        throw { code: "Unauthorized", message: "Acesso negado" };
+                    }
                     return [2 /*return*/];
             }
         });

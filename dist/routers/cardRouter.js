@@ -3,15 +3,7 @@ import { Router } from "express";
 import validateToken from "../middlewares/validateToken.js";
 import validateObj from "../middlewares/validate.js";
 import cardSchema from "../schemas/cardSchema.js";
-
-const cardRouter = Router();
-
-cardRouter.post(
-  "/cards",
-  validateToken,
-  validateObj(cardSchema),
-  cardController.createCard
-);
+var cardRouter = Router();
+cardRouter.post("/cards", validateToken, validateObj(cardSchema), cardController.createCard);
 cardRouter.get("/cards", validateToken, cardController.getAllCards);
-
 export default cardRouter;

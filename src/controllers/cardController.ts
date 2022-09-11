@@ -8,3 +8,9 @@ export async function createCard(req: Request, res: Response) {
   await cardService.createCard({ ...data, owner_id });
   res.sendStatus(201);
 }
+
+export async function getAllCards(req: Request, res: Response) {
+  const { id } = res.locals.decodedToken;
+  const cards = await cardService.getAllCards(id);
+  res.status(200).send(cards);
+}

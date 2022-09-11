@@ -1,3 +1,14 @@
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -34,36 +45,33 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import * as authService from "../services/authService.js";
-export function signIn(req, res) {
+import * as cardService from "../services/cardService.js";
+export function createCard(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, email, password, token;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
-                case 0:
-                    _a = req.body, email = _a.email, password = _a.password;
-                    return [4 /*yield*/, authService.login(email, password)];
-                case 1:
-                    token = _b.sent();
-                    res.status(200).send(token);
-                    return [2 /*return*/];
-            }
-        });
-    });
-}
-export function signUp(req, res) {
-    return __awaiter(this, void 0, void 0, function () {
-        var data;
+        var data, owner_id;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     data = req.body;
-                    return [4 /*yield*/, authService.createUser(data)];
+                    owner_id = res.locals.decodedToken.id;
+                    data.expiration_date = new Date(data.expiration_date);
+                    return [4 /*yield*/, cardService.createCard(__assign(__assign({}, data), { owner_id: owner_id }))];
                 case 1:
                     _a.sent();
                     res.sendStatus(201);
                     return [2 /*return*/];
             }
+        });
+    });
+}
+export function getAllCards(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var id, cards;
+        return __generator(this, function (_a) {
+            id = res.locals.decodedToken.id;
+            cards = cardService.getAllCards(id);
+            res.status(200).send(cards);
+            return [2 /*return*/];
         });
     });
 }

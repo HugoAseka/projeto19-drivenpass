@@ -34,34 +34,56 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import * as authService from "../services/authService.js";
-export function signIn(req, res) {
+import { prisma } from "../database.js";
+export function addCredentialToDatabase(newCredential) {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, email, password, token;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
-                case 0:
-                    _a = req.body, email = _a.email, password = _a.password;
-                    return [4 /*yield*/, authService.login(email, password)];
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, prisma.credentials.create({ data: newCredential })];
                 case 1:
-                    token = _b.sent();
-                    res.status(200).send(token);
+                    _a.sent();
                     return [2 /*return*/];
             }
         });
     });
 }
-export function signUp(req, res) {
+export function getUserCredentialByName(name, owner_id) {
     return __awaiter(this, void 0, void 0, function () {
-        var data;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0:
-                    data = req.body;
-                    return [4 /*yield*/, authService.createUser(data)];
+                case 0: return [4 /*yield*/, prisma.credentials.findMany({ where: { name: name, owner_id: owner_id } })];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+export function getAllUserCredential(userId) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, prisma.credentials.findMany({ where: { owner_id: userId } })];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+export function getCredentialById(id) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, prisma.credentials.findUnique({ where: { id: id } })];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+export function deleteCredentialById(id) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, prisma.credentials["delete"]({ where: { id: id } })];
                 case 1:
                     _a.sent();
-                    res.sendStatus(201);
                     return [2 /*return*/];
             }
         });

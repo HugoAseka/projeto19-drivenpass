@@ -16,3 +16,21 @@ async function checkCardByName(owner_id: number, title: string) {
   if (card.length !== 0)
     throw { code: "Conflict", message: "Nome de cartão já está em uso." };
 }
+
+export async function getAllCards(id: number) {
+  const cryptr = new Cryptr(process.env.SECRET);
+  const cards = await cardRepository.getAllCards(id);
+  const data = cards.map((el) => {
+    return {
+      id: el.id,
+      name: el.name,
+      number: el.number,
+      cvc: cryptr.decrypt(el.cvc),
+      expiration_date: el.expiration_date,
+      password: cryptr.decrypt(el.password),
+      is_virtual: el.is_virtual,
+      type: el.type,
+    };
+  });
+  return { cards: data };
+}
