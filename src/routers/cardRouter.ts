@@ -13,5 +13,5 @@ cardRouter.post(
   cardController.createCard
 );
 cardRouter.get("/cards", validateToken, cardController.getAllCards);
-
+cardRouter.get("/cards/:id", validateToken, cardController.getCardById);
 export default cardRouter;

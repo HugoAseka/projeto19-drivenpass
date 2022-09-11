@@ -34,3 +34,16 @@ export async function getAllCards(id: number) {
   });
   return { cards: data };
 }
+
+export async function getCardById(cardId: number, owner_id: number) {
+  const cryptr = new Cryptr(process.env.SECRET);
+  const card = await checkCardById(cardId, owner_id);
+  return { ...card, password: cryptr.decrypt(card.password) };
+}
+async function checkCardById(cardId: number, owner_id: number) {
+  const card = await cardRepository.getCardById(cardId);
+  if (!card) throw { code: "NotFound", message: "Cartão não existe." };
+  if (card.owner_id !== owner_id)
+    throw { code: "Unauthorized", message: "Cartão não pertence ao usuário." };
+  return card;
+}

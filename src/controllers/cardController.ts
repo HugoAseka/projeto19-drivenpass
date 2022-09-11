@@ -14,3 +14,10 @@ export async function getAllCards(req: Request, res: Response) {
   const cards = await cardService.getAllCards(id);
   res.status(200).send(cards);
 }
+
+export async function getCardById(req: Request, res: Response) {
+  const { id: owner_id } = res.locals.decodedToken;
+  const { id: cardId } = req.params;
+  const card = await cardService.getCardById(Number(cardId), owner_id);
+  res.status(200).send(card);
+}
