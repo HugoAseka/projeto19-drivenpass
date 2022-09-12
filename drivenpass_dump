@@ -303,6 +303,12 @@ COPY public.credentials (id, owner_id, name, url, username, password) FROM stdin
 4	1	aaaaa	http://www.facebook.com	hugo	f4daff04f279a9767beb0b128ec1233d2f1eb637d6e6fe7a4acfdc4c5a1d3df4bd0b03160e11a2c6cf7742f4f9e3b4a1e1d1e2286321b397c10877470d6ff5487517199ca0df7c3a2c98d5f030b2fad4529619c9483eafa2b87dde177e6a94f09ac75b28
 5	2	aaaaa	http://www.facebook.com	hugo	280138db27a45a955ff3cb2c6e5c8dba7052971a208f1051a72e115f8ff36b47ac163ad93e26edaea7b2ab7577a2b0417e12e6219333bad03868e5a6c51d19fc934b56121a3a77c9f45082d2b8eee6e6ff8216850aadf79c5b5ce5c07bfc4b7846b11c9e
 7	2	12	http://www.facebook.com	ana	098c7464b9c096fba34fa2fe8e1c985a8a1a878f61445b08a869249ccd1538f0879df836956959d584a645a80ecd86a53aef778d7ca6591a5e2e217d0ba543fd5f09a720d57f77943c1cb730245020a7dd6df721b249eda05e4417e05e48eaa8a65df238
+8	2	123	http://www.facebook.com	ana	c680c3eac3d6f622713c31a03ca337618ce9749234cd1e37f2cb7c81a7d6e8d55da5d3df42facabad924421a7434b423277a98e6e9da6b7bebe3c6d5fd5ce77558783da213ff744c555663a62b30cdd8c37c2eb10e01c2ed4ee9a6edd8f7c20f41020820
+9	2	1234	http://www.facebook.com	ana	9bc8feead655a9572c41e56aa8df78a28b68eca323bae497ff4d215ff5c227be4057398094223e16770be5fbdb05ee44e2bf88fa37a831f6cfc444394dde7cce84b4177860b01e1ca81ccdcca3949ce734b887b97c5dbbe12ebbdd3a056f170517ed0bcb
+10	2	12345	http://www.facebook.com	ana	fe7807c65edd6ccb36c8230aa13ae1bd8ee7d2e0b0cf72b346958b63eb5e283a0c9328b384870c9e8c730a3cee36b5d2d78acff154f4eb439a63861b244f9babeba89b0e87aadc5bef1fb5c017dce9ccf75b4c69c6ee7a2a63cc9eb268930d136cbae2f9
+11	2	123456	http://www.facebook.com	ana	8b32d4c1a103486f4706a92fbbc2bca81c3f451d233cd0231d383c68d663bdefd4da599b8577cffce43a16e67c9f6c09feea5cfb197e966016aebacf9f0ce5a899b5e127ebef67b74c4814499082e3c6aab37463b7876d37c2b5c20fe0c1dc0bed2302bc
+12	2	1234561	http://www.facebook.com	ana	20e73ea2e8e5ed9e95dbc419212a2fbb497bfb2d2b6584ce78e5835a7f37d5f1f2590db355c649d16f1f2ade41ccdd2417afc38aad1c042e7af7adc3c27596eddc8b69cbd4e72bf3dd53bdbbe153d9b3046cf314dc2d300ca90a2f44c7bd8bb27216f7c6
+13	2	12345611	http://www.facebook.com	ana	d4326e95b4849dec704acbbd038ce7ff1ec6522900220542692a1195735a6a27d237b3e703e6d303249a48dc8a43374557787720271f1813b7bb15deadb1cd10fcdb1a0fbe938c2a68d25a35b512a221e95b776e9bc9086453d8b4983dd33975d8bcd775
 \.
 
 
@@ -321,6 +327,7 @@ COPY public.secure_notes (id, owner_id, title, anotation) FROM stdin;
 COPY public.users (id, email, password, name) FROM stdin;
 1	hugomaseka@gmail.com	$2b$10$kIEEM/aMJFLb86t39f/t..m7mUTZyjgMAhc1cUSFDJvzwJgXTykre	Hugo Local
 2	ana@gmail.com	$2b$10$wiSQl7BVmycS/LvaGwWWQexyCx7XZQfg51hp0.78/7KWCOfrWCU8C	ana
+3	hugoaseka@gmail.com	$2b$10$eWaG51Vj8FDchAqGuJ95gegFvoURqGyiGnMT4i2X0nXSvyazh.eWG	Hugo heroku
 \.
 
 
@@ -346,7 +353,7 @@ SELECT pg_catalog.setval('public.cards_id_seq', 3, true);
 -- Name: credentials_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.credentials_id_seq', 7, true);
+SELECT pg_catalog.setval('public.credentials_id_seq', 13, true);
 
 
 --
@@ -360,7 +367,7 @@ SELECT pg_catalog.setval('public.secure_notes_id_seq', 1, true);
 -- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.users_id_seq', 2, true);
+SELECT pg_catalog.setval('public.users_id_seq', 3, true);
 
 
 --
