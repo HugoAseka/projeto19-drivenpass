@@ -32,7 +32,8 @@ export async function getAllWifis(owner_id: number) {
 
 export async function getWifiById(owner_id: number, wifiId: number) {
   const cryptr = new Cryptr(process.env.SECRET);
-  return await checkWifiById(owner_id, wifiId);
+  const wifi = await checkWifiById(owner_id, wifiId);
+  return { ...wifi, password: cryptr.decrypt(wifi.password) };
 }
 
 async function checkWifiById(owner_id: number, wifiId: number) {
