@@ -6,4 +6,6 @@ import cardSchema from "../schemas/cardSchema.js";
 var cardRouter = Router();
 cardRouter.post("/cards", validateToken, validateObj(cardSchema), cardController.createCard);
 cardRouter.get("/cards", validateToken, cardController.getAllCards);
+cardRouter.get("/cards/:id", validateToken, cardController.getCardById);
+cardRouter["delete"]("/cards/:id", validateToken, cardController.deleteCard);
 export default cardRouter;

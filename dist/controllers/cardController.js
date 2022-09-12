@@ -68,10 +68,49 @@ export function getAllCards(req, res) {
     return __awaiter(this, void 0, void 0, function () {
         var id, cards;
         return __generator(this, function (_a) {
-            id = res.locals.decodedToken.id;
-            cards = cardService.getAllCards(id);
-            res.status(200).send(cards);
-            return [2 /*return*/];
+            switch (_a.label) {
+                case 0:
+                    id = res.locals.decodedToken.id;
+                    return [4 /*yield*/, cardService.getAllCards(id)];
+                case 1:
+                    cards = _a.sent();
+                    res.status(200).send(cards);
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+export function getCardById(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var owner_id, cardId, card;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    owner_id = res.locals.decodedToken.id;
+                    cardId = req.params.id;
+                    return [4 /*yield*/, cardService.getCardById(Number(cardId), owner_id)];
+                case 1:
+                    card = _a.sent();
+                    res.status(200).send(card);
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+export function deleteCard(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var owner_id, cardId;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    owner_id = res.locals.decodedToken.id;
+                    cardId = req.params.id;
+                    return [4 /*yield*/, cardService.deleteCard(Number(cardId), owner_id)];
+                case 1:
+                    _a.sent();
+                    res.sendStatus(202);
+                    return [2 /*return*/];
+            }
         });
     });
 }

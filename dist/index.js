@@ -13,4 +13,3 @@ app.use(errorHandler);
 app.listen(process.env.PORT, function () {
     return console.log("RODANDO NA PORTA ".concat(process.env.PORT));
 });
-

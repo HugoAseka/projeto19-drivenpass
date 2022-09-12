@@ -87,10 +87,10 @@ export function getAllCards(id) {
             switch (_a.label) {
                 case 0:
                     cryptr = new Cryptr(process.env.SECRET);
-                    cards = cardRepository.getAllCards(id);
-                    return [4 /*yield*/, cards];
+                    return [4 /*yield*/, cardRepository.getAllCards(id)];
                 case 1:
-                    data = (_a.sent()).map(function (el) {
+                    cards = _a.sent();
+                    data = cards.map(function (el) {
                         return {
                             id: el.id,
                             name: el.name,
@@ -103,6 +103,53 @@ export function getAllCards(id) {
                         };
                     });
                     return [2 /*return*/, { cards: data }];
+            }
+        });
+    });
+}
+export function getCardById(cardId, owner_id) {
+    return __awaiter(this, void 0, void 0, function () {
+        var cryptr, card;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    cryptr = new Cryptr(process.env.SECRET);
+                    return [4 /*yield*/, checkCardById(cardId, owner_id)];
+                case 1:
+                    card = _a.sent();
+                    return [2 /*return*/, __assign(__assign({}, card), { password: cryptr.decrypt(card.password) })];
+            }
+        });
+    });
+}
+function checkCardById(cardId, owner_id) {
+    return __awaiter(this, void 0, void 0, function () {
+        var card;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, cardRepository.getCardById(cardId)];
+                case 1:
+                    card = _a.sent();
+                    if (!card)
+                        throw { code: "NotFound", message: "Cartão não existe." };
+                    if (card.owner_id !== owner_id)
+                        throw { code: "Unauthorized", message: "Cartão não pertence ao usuário." };
+                    return [2 /*return*/, card];
+            }
+        });
+    });
+}
+export function deleteCard(cardId, owner_id) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, checkCardById(cardId, owner_id)];
+                case 1:
+                    _a.sent();
+                    return [4 /*yield*/, cardRepository.deleteCard(cardId)];
+                case 2:
+                    _a.sent();
+                    return [2 /*return*/];
             }
         });
     });
