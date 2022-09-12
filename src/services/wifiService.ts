@@ -29,3 +29,16 @@ export async function getAllWifis(owner_id: number) {
   });
   return { wifis: data };
 }
+
+export async function getWifiById(owner_id: number, wifiId: number) {
+  const cryptr = new Cryptr(process.env.SECRET);
+  return await checkWifiById(owner_id, wifiId);
+}
+
+async function checkWifiById(owner_id: number, wifiId: number) {
+  const wifi = await wifiRepository.getWifiById(wifiId);
+  if (!wifi) throw { code: "NotFound", message: "Wifi não encontrado." };
+  if (wifi.owner_id !== owner_id)
+    throw { code: "Unauthorized", message: "Wifi não pertence ao usuário." };
+  return wifi;
+}
