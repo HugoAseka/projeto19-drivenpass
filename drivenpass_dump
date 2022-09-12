@@ -1,0 +1,498 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 12.12 (Ubuntu 12.12-0ubuntu0.20.04.1)
+-- Dumped by pg_dump version 12.12 (Ubuntu 12.12-0ubuntu0.20.04.1)
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- Name: Card_type; Type: TYPE; Schema: public; Owner: postgres
+--
+
+CREATE TYPE public."Card_type" AS ENUM (
+    'credito',
+    'debito',
+    'ambos'
+);
+
+
+ALTER TYPE public."Card_type" OWNER TO postgres;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- Name: _prisma_migrations; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public._prisma_migrations (
+    id character varying(36) NOT NULL,
+    checksum character varying(64) NOT NULL,
+    finished_at timestamp with time zone,
+    migration_name character varying(255) NOT NULL,
+    logs text,
+    rolled_back_at timestamp with time zone,
+    started_at timestamp with time zone DEFAULT now() NOT NULL,
+    applied_steps_count integer DEFAULT 0 NOT NULL
+);
+
+
+ALTER TABLE public._prisma_migrations OWNER TO postgres;
+
+--
+-- Name: cards; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.cards (
+    id integer NOT NULL,
+    owner_id integer NOT NULL,
+    title character varying(255) NOT NULL,
+    name character varying(255) NOT NULL,
+    number character varying(255) NOT NULL,
+    cvc character varying(255) NOT NULL,
+    expiration_date date NOT NULL,
+    password character varying(255) NOT NULL,
+    is_virtual boolean NOT NULL,
+    type public."Card_type" NOT NULL
+);
+
+
+ALTER TABLE public.cards OWNER TO postgres;
+
+--
+-- Name: cards_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.cards_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.cards_id_seq OWNER TO postgres;
+
+--
+-- Name: cards_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.cards_id_seq OWNED BY public.cards.id;
+
+
+--
+-- Name: credentials; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.credentials (
+    id integer NOT NULL,
+    owner_id integer NOT NULL,
+    name character varying(255) NOT NULL,
+    url character varying(255) NOT NULL,
+    username character varying(255) NOT NULL,
+    password character varying(255) NOT NULL
+);
+
+
+ALTER TABLE public.credentials OWNER TO postgres;
+
+--
+-- Name: credentials_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.credentials_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.credentials_id_seq OWNER TO postgres;
+
+--
+-- Name: credentials_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.credentials_id_seq OWNED BY public.credentials.id;
+
+
+--
+-- Name: secure_notes; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.secure_notes (
+    id integer NOT NULL,
+    owner_id integer NOT NULL,
+    title character varying(50) NOT NULL,
+    anotation text NOT NULL
+);
+
+
+ALTER TABLE public.secure_notes OWNER TO postgres;
+
+--
+-- Name: secure_notes_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.secure_notes_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.secure_notes_id_seq OWNER TO postgres;
+
+--
+-- Name: secure_notes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.secure_notes_id_seq OWNED BY public.secure_notes.id;
+
+
+--
+-- Name: users; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.users (
+    id integer NOT NULL,
+    email character varying(255) NOT NULL,
+    password character varying(255) NOT NULL,
+    name character varying(255)
+);
+
+
+ALTER TABLE public.users OWNER TO postgres;
+
+--
+-- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.users_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.users_id_seq OWNER TO postgres;
+
+--
+-- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
+
+
+--
+-- Name: wifis; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.wifis (
+    id integer NOT NULL,
+    owner_id integer NOT NULL,
+    name character varying(255) NOT NULL,
+    network character varying(255) NOT NULL,
+    password character varying(255) NOT NULL
+);
+
+
+ALTER TABLE public.wifis OWNER TO postgres;
+
+--
+-- Name: wifis_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.wifis_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.wifis_id_seq OWNER TO postgres;
+
+--
+-- Name: wifis_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.wifis_id_seq OWNED BY public.wifis.id;
+
+
+--
+-- Name: cards id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.cards ALTER COLUMN id SET DEFAULT nextval('public.cards_id_seq'::regclass);
+
+
+--
+-- Name: credentials id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.credentials ALTER COLUMN id SET DEFAULT nextval('public.credentials_id_seq'::regclass);
+
+
+--
+-- Name: secure_notes id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.secure_notes ALTER COLUMN id SET DEFAULT nextval('public.secure_notes_id_seq'::regclass);
+
+
+--
+-- Name: users id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_id_seq'::regclass);
+
+
+--
+-- Name: wifis id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.wifis ALTER COLUMN id SET DEFAULT nextval('public.wifis_id_seq'::regclass);
+
+
+--
+-- Data for Name: _prisma_migrations; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public._prisma_migrations (id, checksum, finished_at, migration_name, logs, rolled_back_at, started_at, applied_steps_count) FROM stdin;
+e84e7ae1-6254-49e2-840d-717fb6939616	a731c08a73458620f1153c5219167bcd7d05a8811f812ced09ec6012ac74b520	2022-09-10 15:56:27.337143-03	20220910185627_prisma_schema	\N	\N	2022-09-10 15:56:27.313169-03	1
+\.
+
+
+--
+-- Data for Name: cards; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.cards (id, owner_id, title, name, number, cvc, expiration_date, password, is_virtual, type) FROM stdin;
+3	2	caixaaa	qeqweqweqwewqe	1234567819	00eaaefd8e171bc8b92fc46dd38f0fac7f372f3a9b6c07e4bdcaeb05854aefe4e85ef8f5e7b8b2dc2a2efbb8f6b3a45f2c0c27fa403eb9688360818a7f984b1947fd72ec087241218610f4a285090a51abeba6475ebf28752bc8ed34021a6f1b871b17	2024-01-01	e05f79e69145644fff5fc4dc9cdc5d156e4a43e7d82f0ab63b36e5ace77361256cdf0a935a3f6c0b540f5cd22242588859354e987a441f417bd8dda1d4df54e479d17f7d0670cd0cca3c969dc6e3c5c2ccd421f1356abb07cd436ad31c4a69aa7128eeeb	f	ambos
+\.
+
+
+--
+-- Data for Name: credentials; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.credentials (id, owner_id, name, url, username, password) FROM stdin;
+2	1	facebook	http://www.facebook.com	hugo	f30a346070629e266dada804d840dd14eeb089adbf1ecc161e3d74d78419f8fd858cfbe2ac688b422c0efbc21e3f0ca1e7b9e249db20342cebb7c640e3c487636ebbb8b5f455e14e215d85356274030bb29ff79bec3f1327810e52ddbbbc0c7b9825617d
+3	1	1234	http://www.facebook.com	hugo	3dc04743104d1921b44142765384d7c6a9e8dbf629f5192c723083c94d44d60d0cacae9c28bb039733ab8be948b2c056fe975a744a30bb4ddf0185cdea4b3d7c0b7a93e1bb7d0e164fac140f118a086a1c5ab71d23fd383a28a637c294c48550456f1060
+4	1	aaaaa	http://www.facebook.com	hugo	f4daff04f279a9767beb0b128ec1233d2f1eb637d6e6fe7a4acfdc4c5a1d3df4bd0b03160e11a2c6cf7742f4f9e3b4a1e1d1e2286321b397c10877470d6ff5487517199ca0df7c3a2c98d5f030b2fad4529619c9483eafa2b87dde177e6a94f09ac75b28
+5	2	aaaaa	http://www.facebook.com	hugo	280138db27a45a955ff3cb2c6e5c8dba7052971a208f1051a72e115f8ff36b47ac163ad93e26edaea7b2ab7577a2b0417e12e6219333bad03868e5a6c51d19fc934b56121a3a77c9f45082d2b8eee6e6ff8216850aadf79c5b5ce5c07bfc4b7846b11c9e
+7	2	12	http://www.facebook.com	ana	098c7464b9c096fba34fa2fe8e1c985a8a1a878f61445b08a869249ccd1538f0879df836956959d584a645a80ecd86a53aef778d7ca6591a5e2e217d0ba543fd5f09a720d57f77943c1cb730245020a7dd6df721b249eda05e4417e05e48eaa8a65df238
+\.
+
+
+--
+-- Data for Name: secure_notes; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.secure_notes (id, owner_id, title, anotation) FROM stdin;
+\.
+
+
+--
+-- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.users (id, email, password, name) FROM stdin;
+1	hugomaseka@gmail.com	$2b$10$kIEEM/aMJFLb86t39f/t..m7mUTZyjgMAhc1cUSFDJvzwJgXTykre	Hugo Local
+2	ana@gmail.com	$2b$10$wiSQl7BVmycS/LvaGwWWQexyCx7XZQfg51hp0.78/7KWCOfrWCU8C	ana
+\.
+
+
+--
+-- Data for Name: wifis; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.wifis (id, owner_id, name, network, password) FROM stdin;
+1	2	wifi hugo	lan	195ef1e07282ade9838e901ddf67735c68c49f92a958670f7c9d6a7f32396edaf478b2e90a1fa3b91aaf773f991a316d1eb4a3cb49f7c04009a5ff8b89dae464393c1706ac8fd82aad96210d1136d7ed552a2f1a520a4a6a4097527c52b09c984fd15a221923946c
+2	2	wifi huaago	lan	2e8718a9695307462c8829fc7c0a3a0d6ed14cfd8674947e9953e42784410c59a6e2496c130bd511aa7ccb70cd199dcf2c945aa3c2436c9613092fe9bd28f2ca02fe978acdb63c91960bbdf22cc08215a4d880e160824b6a01956398f87d019c04f1ba36f309fbf1
+3	2	wifi huadadadaago	lan	2e377ff0d4e6c5d0e272a967800cf0bac410cf9ff76dfde4febe529d803e16881b9adf952f5cffbad1b447000aae14c481bcd393e95eade32961df012d7cf70198b7eb9fa831f2d2ef690c0777f5eeda42c8c9282b69d36002c85659b35ef4eaaea9fa87943114ec
+\.
+
+
+--
+-- Name: cards_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.cards_id_seq', 3, true);
+
+
+--
+-- Name: credentials_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.credentials_id_seq', 7, true);
+
+
+--
+-- Name: secure_notes_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.secure_notes_id_seq', 1, true);
+
+
+--
+-- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.users_id_seq', 2, true);
+
+
+--
+-- Name: wifis_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.wifis_id_seq', 4, true);
+
+
+--
+-- Name: _prisma_migrations _prisma_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public._prisma_migrations
+    ADD CONSTRAINT _prisma_migrations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cards cards_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.cards
+    ADD CONSTRAINT cards_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: credentials credentials_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.credentials
+    ADD CONSTRAINT credentials_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: secure_notes secure_notes_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.secure_notes
+    ADD CONSTRAINT secure_notes_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: wifis wifis_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.wifis
+    ADD CONSTRAINT wifis_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cards_expiration_date_key; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE UNIQUE INDEX cards_expiration_date_key ON public.cards USING btree (expiration_date);
+
+
+--
+-- Name: cards_owner_id_name_key; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE UNIQUE INDEX cards_owner_id_name_key ON public.cards USING btree (owner_id, name);
+
+
+--
+-- Name: credentials_owner_id_name_key; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE UNIQUE INDEX credentials_owner_id_name_key ON public.credentials USING btree (owner_id, name);
+
+
+--
+-- Name: secure_notes_owner_id_title_key; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE UNIQUE INDEX secure_notes_owner_id_title_key ON public.secure_notes USING btree (owner_id, title);
+
+
+--
+-- Name: users_email_key; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE UNIQUE INDEX users_email_key ON public.users USING btree (email);
+
+
+--
+-- Name: wifis_owner_id_name_key; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE UNIQUE INDEX wifis_owner_id_name_key ON public.wifis USING btree (owner_id, name);
+
+
+--
+-- Name: cards cards_owner_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.cards
+    ADD CONSTRAINT cards_owner_id_fkey FOREIGN KEY (owner_id) REFERENCES public.users(id) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- Name: credentials credentials_owner_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.credentials
+    ADD CONSTRAINT credentials_owner_id_fkey FOREIGN KEY (owner_id) REFERENCES public.users(id) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- Name: secure_notes secure_notes_owner_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.secure_notes
+    ADD CONSTRAINT secure_notes_owner_id_fkey FOREIGN KEY (owner_id) REFERENCES public.users(id) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- Name: wifis wifis_owner_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.wifis
+    ADD CONSTRAINT wifis_owner_id_fkey FOREIGN KEY (owner_id) REFERENCES public.users(id) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- PostgreSQL database dump complete
+--
+
