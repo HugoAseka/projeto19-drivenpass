@@ -16,3 +16,16 @@ async function checkWifiName(owner_id: number, name: string) {
     throw { code: "Conflict", message: "Nome já está em uso." };
 }
 
+export async function getAllWifis(owner_id: number) {
+  const cryptr = new Cryptr(process.env.SECRET);
+  const wifis = await wifiRepository.getAllWifis(owner_id);
+  const data = wifis.map((el) => {
+    return {
+      id: el.id,
+      name: el.name,
+      network: el.network,
+      password: cryptr.decrypt(el.password),
+    };
+  });
+  return { wifis: data };
+}

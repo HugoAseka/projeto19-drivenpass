@@ -7,3 +7,9 @@ export async function createWifi(req: Request, res: Response) {
   await wifiService.createWifi({ ...data, owner_id });
   res.sendStatus(201);
 }
+
+export async function getAllWifis(req: Request, res: Response) {
+  const { id: owner_id } = res.locals.decodedToken;
+  const wifis = await wifiService.getAllWifis(owner_id);
+  res.status(200).send(wifis);
+}
