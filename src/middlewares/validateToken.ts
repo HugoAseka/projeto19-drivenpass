@@ -15,7 +15,10 @@ function validateToken(req: Request, res: Response, next: NextFunction) {
     };
   }
   try {
-    res.locals.decodedToken = jwt.verify(token, process.env.SECRET_KEY_TOKEN);
+    res.locals.decodedToken = jwt.verify(
+      token,
+      "" + process.env.SECRET_KEY_TOKEN
+    );
     next();
   } catch (err) {
     return res.status(401).send("Token inválido");
