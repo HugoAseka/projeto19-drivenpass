@@ -30,7 +30,7 @@ export async function login(email: string, password: string) {
       {
         id: user.id,
       },
-      process.env.SECRET_KEY_TOKEN,
+      "" + process.env.SECRET_KEY_TOKEN,
       { expiresIn: "10 days" }
     );
     return token;
