@@ -43,3 +43,8 @@ async function checkWifiById(owner_id: number, wifiId: number) {
     throw { code: "Unauthorized", message: "Wifi não pertence ao usuário." };
   return wifi;
 }
+
+export async function deleteWifi(owner_id: number, wifiId: number) {
+  await checkWifiById(owner_id, wifiId);
+  await wifiRepository.deleteWifi(wifiId);
+}
